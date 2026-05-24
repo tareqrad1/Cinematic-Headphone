@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #050506;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis owns smoothing */
+}
+
+body {
+  background-color: var(--bg);
+  color: theme("colors.platinum");
+  overflow-x: hidden;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Thin luxury scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #050506;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2d34;
+  border-radius: 999px;
+}
+
+@layer components {
+  .container-luxe {
+    @apply mx-auto w-full max-w-wide px-6 md:px-10 lg:px-16;
+  }
+
+  .kicker {
+    @apply text-[11px] font-medium uppercase tracking-luxe text-gold;
+  }
+
+  .display-xl {
+    @apply font-display text-[clamp(3rem,9vw,9rem)] leading-[0.92] tracking-tight;
+  }
+
+  .display-lg {
+    @apply font-display text-[clamp(2.4rem,6vw,5.5rem)] leading-[0.96] tracking-tight;
+  }
+
+  .body-lux {
+    @apply text-base leading-relaxed text-mist md:text-lg;
+  }
+
+  /* subtle metallic gradient text */
+  .text-metallic {
+    background: linear-gradient(
+      100deg,
+      #e8e9ec 0%,
+      #9aa0ab 30%,
+      #ffffff 50%,
+      #9aa0ab 70%,
+      #e8e9ec 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glass {
+    @apply border border-white/10 bg-white/[0.03] backdrop-blur-md;
+  }
+
+  .btn-luxe {
+    @apply inline-flex items-center gap-3 rounded-full border border-white/15
+           px-8 py-4 text-sm uppercase tracking-wide2 text-platinum
+           transition-colors duration-500 ease-cinematic hover:border-gold hover:text-gold;
+  }
+}
+
+/* hidden state for GSAP-managed reveals so there is no FOUC */
+.reveal-hidden {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-hidden {
+    opacity: 1;
+  }
+}
