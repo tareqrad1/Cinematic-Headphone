@@ -159,37 +159,44 @@ export function FrameSequence({
         onUpdate: scheduleDraw,
       });
 
-      // Beat overlays: GPU-only props (opacity/transform). One timeline scrubbed
-      // across the same pinned range; no layout-affecting properties.
+      // Beat overlays — ONE shared scrubbed timeline whose total length is
+      // pinned to 1.0, so every beat's [start, end] fraction maps directly to
+      // scroll progress (0–1). Each beat ENTERS and fully EXITS within its own
+      // window — the exit completes by `end`, never bleeding into the next
+      // beat's entrance — so two left-aligned blocks (which share the same
+      // centred rectangle) are never on screen together. Enter/exit each take
+      // ~28% of the window; the middle holds steady for readability.
+      const beatsTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top top",
+          end: () => `+=${window.innerHeight * scrollLength}`,
+          scrub: true,
+        },
+      });
+      // Anchor the timeline to a normalised 0→1 length so positions = progress.
+      beatsTl.to({}, { duration: 1 }, 0);
+
       SEQUENCE_BEATS.forEach((beat) => {
         const el = root.current!.querySelector<HTMLElement>(
           `[data-beat="${beat.id}"]`,
         );
         if (!el) return;
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: root.current,
-              start: "top top",
-              end: () => `+=${window.innerHeight * scrollLength}`,
-              scrub: true,
-            },
-          })
+        const span = beat.end - beat.start;
+        const enter = span * 0.28;
+        const exit = span * 0.28;
+        beatsTl
           .fromTo(
             el,
-            { autoAlpha: 0, yPercent: 30 },
-            {
-              autoAlpha: 1,
-              yPercent: 0,
-              duration: beat.end - beat.start,
-              ease: "power2.out",
-            },
+            { autoAlpha: 0, yPercent: 24 },
+            { autoAlpha: 1, yPercent: 0, duration: enter, ease: "power2.out" },
             beat.start,
           )
+          // elegant exit, finishing exactly at beat.end
           .to(
             el,
-            { autoAlpha: 0, yPercent: -30, duration: 0.12 },
-            beat.end,
+            { autoAlpha: 0, yPercent: -24, duration: exit, ease: "power2.in" },
+            beat.end - exit,
           );
       });
     }, root);

@@ -5,9 +5,8 @@ import { BRAND } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { label: "Sound", href: "#sound" },
-  { label: "Engineering", href: "#engineering" },
-  { label: "Materials", href: "#materials" },
+  { label: "Story", href: "#story" },
+  { label: "Immersive", href: "#immersive" },
 ] as const;
 
 export function Navbar() {

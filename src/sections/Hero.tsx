@@ -110,11 +110,13 @@ export function Hero() {
       <div className="hero-copy container-luxe relative z-10 flex flex-col items-center text-center">
         <span className="hero-kicker kicker mb-6">{BRAND.name} — New</span>
 
-        <h1 className="display-xl text-metallic">
+        <h1 className="display-xl relative z-20">
           {words.map((word) => (
-            <span key={word} className="inline-block overflow-hidden align-bottom">
-              <span className="hero-word inline-block">{word}</span>
-              {" "}
+            <span
+              key={word}
+              className="mr-[0.22em] inline-block overflow-hidden pb-[0.12em] align-bottom last:mr-0"
+            >
+              <span className="hero-word text-metallic inline-block">{word}</span>
             </span>
           ))}
         </h1>

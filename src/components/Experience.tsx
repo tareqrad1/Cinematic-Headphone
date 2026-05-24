@@ -10,7 +10,7 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Preloader } from "@/components/ui/Preloader";
 import { Hero } from "@/sections/Hero";
 import { FrameSequence } from "@/sections/FrameSequence";
-import { StorySections } from "@/sections/StorySections";
+import { PersistentStory } from "@/sections/PersistentStory";
 import { Immersive } from "@/sections/Immersive";
 import { CallToAction } from "@/sections/CallToAction";
 
@@ -42,7 +42,7 @@ export function Experience() {
       <main className="relative z-10">
         <Hero />
         <FrameSequence store={store} drawTick={drawTick} />
-        <StorySections />
+        <PersistentStory />
         <Immersive />
         <CallToAction />
       </main>

@@ -45,6 +45,7 @@ export function Immersive() {
   return (
     <section
       ref={root}
+      id="immersive"
       className="relative flex min-h-[90svh] flex-col items-center justify-center overflow-hidden border-t border-white/5 py-28 text-center"
     >
       <div className="container-luxe relative z-10">
