@@ -116,26 +116,43 @@ export const STORY_CHAPTERS: ReadonlyArray<StoryChapter> = [
   },
 ];
 
-export const STORY_SECTIONS: ReadonlyArray<StorySection> = [
+/**
+ * Craftsmanship editorial — alternating image/text splits about the OBJECT
+ * (materials, engineering, philosophy). Deliberately distinct from the
+ * Immersive section, which speaks to the LISTENING experience, so the two
+ * never repeat a stat or a theme. `image` points at a premium product shot.
+ */
+export const STORY_SECTIONS: ReadonlyArray<
+  StorySection & {
+    readonly image: { src: string; width: number; height: number };
+    readonly imageAlt: string;
+  }
+> = [
   {
-    id: "sound",
-    kicker: "Premium Sound",
-    title: "A stage with no walls",
-    body: "Adaptive spatial processing places every instrument in its own pocket of air. Close your eyes and the room dissolves.",
-    stat: { value: "360°", label: "Spatial audio" },
+    id: "materials",
+    kicker: "Materials",
+    title: "Cold metal, warm touch",
+    body: "Aerospace-grade aluminium machined from a single billet, memory foam wrapped in full-grain lambskin, a headband of woven carbon. Cold to first touch, warm for hours.",
+    stat: { value: "284g", label: "Total weight" },
+    image: { src: "/products/studio-1.jpg", width: 1024, height: 1024 },
+    imageAlt: "Machined aluminium ear cups in close detail",
   },
   {
     id: "engineering",
     kicker: "Engineering",
     title: "Obsessed with the unseen",
-    body: "Forty-one components, machined to micron tolerances, assembled by hand. The complexity exists so the experience never has to.",
+    body: "Forty-one components, machined to micron tolerances and assembled by hand in a single session. The complexity exists so the experience never has to.",
     stat: { value: "0.0003%", label: "Total harmonic distortion" },
+    image: { src: "/products/phantom-pro-1.jpg", width: 736, height: 736 },
+    imageAlt: "Leather headband and precision yoke, detail",
   },
   {
-    id: "materials",
-    kicker: "Materials",
-    title: "Cold metal, warm touch",
-    body: "Aerospace aluminium, memory-foam wrapped in lambskin, and a headband of woven carbon. Luxury you can hold for hours.",
-    stat: { value: "40h", label: "Battery, ANC on" },
+    id: "philosophy",
+    kicker: "Philosophy",
+    title: "Everything we removed",
+    body: "No logos shouting for attention. No seams you can feel. No setting you have to think about. What's left is the only thing that matters — the music, and you.",
+    stat: { value: "01", label: "Object, perfected" },
+    image: { src: "/products/phantom-one-1.webp", width: 439, height: 611 },
+    imageAlt: "The Aurora Phantom One, hero silhouette",
   },
 ];

@@ -10,6 +10,8 @@ import { Preloader } from "@/components/ui/Preloader";
 import { Hero } from "@/sections/Hero";
 import { FrameSequence } from "@/sections/FrameSequence";
 import { PersistentStory } from "@/sections/PersistentStory";
+import { Craftsmanship } from "@/sections/Craftsmanship";
+import { Manifesto } from "@/sections/Manifesto";
 import { Immersive } from "@/sections/Immersive";
 import { CollectionShowcase } from "@/sections/CollectionShowcase";
 import { Finale } from "@/sections/Finale";
@@ -43,6 +45,8 @@ export function Experience() {
         <Hero />
         <FrameSequence store={store} drawTick={drawTick} />
         <PersistentStory />
+        <Craftsmanship />
+        <Manifesto />
         <Immersive />
         <CollectionShowcase />
         <Finale />

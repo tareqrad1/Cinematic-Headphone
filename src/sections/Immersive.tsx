@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap } from "@/lib/gsap";
-import { scrollReveal } from "@/animations/reveal";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 
 const BARS = Array.from({ length: 48 });
@@ -35,10 +34,29 @@ export function Immersive() {
   useIsomorphicLayoutEffect(() => {
     if (!root.current) return;
     const ctx = gsap.context(() => {
-      scrollReveal({
-        targets: root.current!.querySelectorAll(".imm-reveal"),
-        trigger: root.current!,
-      });
+      // Self-healing reveal. This section sits between pinned sections, whose
+      // pin-spacing shifts trigger positions after first layout — a plain
+      // scroll-reveal can mis-measure and never fire, leaving the opacity-0 copy
+      // invisible. So: hide via JS (CSS resting state stays visible), use a
+      // `once` trigger with a forgiving start, and refresh after mount.
+      const targets = gsap.utils.toArray<HTMLElement>(".imm-reveal");
+      if (targets.length > 0) {
+        gsap.set(targets, { y: 48, autoAlpha: 0, filter: "blur(12px)" });
+        gsap.to(targets, {
+          y: 0,
+          autoAlpha: 1,
+          filter: "blur(0px)",
+          duration: 1.1,
+          stagger: 0.12,
+          ease: "power3.out",
+          clearProps: "filter",
+          scrollTrigger: {
+            trigger: root.current,
+            start: "top 88%",
+            once: true,
+          },
+        });
+      }
 
       const bars = gsap.utils.toArray<HTMLElement>(".eq-bar");
       gsap.fromTo(
@@ -56,6 +74,10 @@ export function Immersive() {
           },
         },
       );
+
+      // Anchor all of the above to correct positions once the surrounding pins
+      // have injected their spacing.
+      ScrollTrigger.refresh();
     }, root);
     return () => ctx.revert();
   }, []);
@@ -67,11 +89,11 @@ export function Immersive() {
       className="relative flex min-h-[90svh] flex-col items-center justify-center overflow-hidden border-t border-white/5 pb-[42vh] pt-28 text-center"
     >
       <div className="container-luxe relative z-10">
-        <span className="imm-reveal reveal-hidden kicker">Immersive Audio</span>
-        <h2 className="imm-reveal reveal-hidden display-lg mx-auto mt-5 max-w-3xl text-metallic">
+        <span className="imm-reveal kicker">Immersive Audio</span>
+        <h2 className="imm-reveal display-lg mx-auto mt-5 max-w-3xl text-metallic">
           You don&apos;t listen to it. You step inside it.
         </h2>
-        <p className="imm-reveal reveal-hidden body-lux mx-auto mt-7 max-w-xl">
+        <p className="imm-reveal body-lux mx-auto mt-7 max-w-xl">
           Head-tracked spatial audio locks the soundstage to the world around
           you. Turn your head — the music stays exactly where it should.
         </p>
@@ -80,7 +102,7 @@ export function Immersive() {
           {PILLARS.map((pillar) => (
             <div
               key={pillar.title}
-              className="imm-reveal reveal-hidden flex flex-col items-center bg-graphite/60 px-7 py-10 text-center backdrop-blur-sm"
+              className="imm-reveal flex flex-col items-center bg-graphite/60 px-7 py-10 text-center backdrop-blur-sm"
             >
               <span className="font-display text-5xl text-gold">{pillar.value}</span>
               <span className="mt-4 text-xs uppercase tracking-wide2 text-platinum">
