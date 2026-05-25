@@ -15,10 +15,14 @@ export function useSmoothScroll(): void {
     if (prefersReducedMotion()) return;
 
     const lenis = new Lenis({
-      duration: 1.15,
+      // Slightly snappier than before: heavy Lenis smoothing + GSAP scrub were
+      // double-damping the pinned frame sequences, making them trail the scroll.
+      // A shorter duration keeps premium glide while letting scrub track tightly.
+      duration: 0.9,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 1.1,
+      touchMultiplier: 1.6,
     });
 
     lenis.on("scroll", ScrollTrigger.update);

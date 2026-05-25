@@ -41,3 +41,61 @@ export interface StoryChapter {
   /** where the shared product travels to for this chapter */
   readonly product: ProductTransform;
 }
+
+/* ──────────────────────────── ECOMMERCE ──────────────────────────── */
+
+export type ProductCategory =
+  | "Over-Ear"
+  | "Studio"
+  | "Wireless"
+  | "Limited";
+
+/** A single resolved image with its intrinsic dimensions for next/image. */
+export interface ProductImage {
+  readonly src: string;
+  readonly width: number;
+  readonly height: number;
+  readonly alt: string;
+}
+
+export interface ProductSpec {
+  readonly label: string;
+  readonly value: string;
+}
+
+export interface Product {
+  readonly id: string;
+  readonly slug: string;
+  readonly name: string;
+  readonly category: ProductCategory;
+  /** one-line luxury hook shown on cards */
+  readonly tagline: string;
+  /** richer paragraph shown on the detail page */
+  readonly description: string;
+  /** price in whole USD (no cents — these are luxury round numbers) */
+  readonly price: number;
+  /** optional struck-through original price for a subtle "value" cue */
+  readonly compareAtPrice?: number;
+  readonly colorName: string;
+  /** hex used for the swatch + ambient glow tint behind the product */
+  readonly accent: string;
+  readonly featured: boolean;
+  /** newest-first ordering key (higher = newer) */
+  readonly releaseRank: number;
+  readonly gallery: ReadonlyArray<ProductImage>;
+  readonly specs: ReadonlyArray<ProductSpec>;
+  readonly highlights: ReadonlyArray<string>;
+}
+
+export interface CartLine {
+  readonly product: Product;
+  readonly quantity: number;
+}
+
+export type SortKey =
+  | "featured"
+  | "newest"
+  | "price-asc"
+  | "price-desc";
+
+export type ViewMode = "grid" | "list";

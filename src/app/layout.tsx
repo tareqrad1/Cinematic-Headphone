@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import { BRAND } from "@/lib/config";
+import { BRAND, SITE, SITE_URL } from "@/lib/config";
+import { Providers } from "@/components/Providers";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -17,9 +18,42 @@ const display = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: `${BRAND.name} ${BRAND.product} — ${BRAND.tagline}`,
-  description:
-    "A cinematic interactive experience for the Aurora Phantom One luxury over-ear headphones.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE.name} — ${BRAND.tagline}`,
+    template: `%s — ${SITE.name}`,
+  },
+  description: SITE.description,
+  applicationName: SITE.name,
+  keywords: [
+    "luxury headphones",
+    "over-ear headphones",
+    "noise cancelling",
+    "high fidelity audio",
+    "AURORA",
+    "Phantom One",
+  ],
+  authors: [{ name: SITE.name }],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    title: `${SITE.name} — ${BRAND.tagline}`,
+    description: SITE.description,
+    url: SITE_URL,
+    images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: SITE.name }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name} — ${BRAND.tagline}`,
+    description: SITE.description,
+    images: [SITE.ogImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export const viewport: Viewport = {
@@ -33,7 +67,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${sans.variable} ${display.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

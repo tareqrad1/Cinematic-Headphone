@@ -1,16 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { BRAND } from "@/lib/config";
 import { cn } from "@/lib/utils";
+import { CartButton } from "@/components/cart/CartButton";
 
-const LINKS = [
-  { label: "Story", href: "#story" },
-  { label: "Immersive", href: "#immersive" },
+const HOME_LINKS = [
+  { label: "Story", href: "/#story" },
+  { label: "Immersive", href: "/#immersive" },
+  { label: "Shop", href: "/products" },
+] as const;
+
+const INNER_LINKS = [
+  { label: "Collection", href: "/products" },
+  { label: "Story", href: "/#story" },
 ] as const;
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const onHome = pathname === "/";
+  const links = onHome ? HOME_LINKS : INNER_LINKS;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -22,36 +34,42 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-700 ease-cinematic",
-        scrolled
+        "fixed inset-x-0 top-0 z-[80] transition-all duration-700 ease-cinematic",
+        scrolled || !onHome
           ? "border-b border-white/5 bg-void/70 backdrop-blur-xl"
           : "border-b border-transparent",
       )}
     >
       <nav className="container-luxe flex h-16 items-center justify-between md:h-20">
-        <a
-          href="#top"
+        <Link
+          href="/"
           className="font-display text-xl tracking-luxe text-platinum md:text-2xl"
         >
           {BRAND.name}
-        </a>
+        </Link>
 
         <ul className="hidden items-center gap-10 md:flex">
-          {LINKS.map((link) => (
+          {links.map((link) => (
             <li key={link.href}>
-              <a
+              <Link
                 href={link.href}
                 className="text-xs uppercase tracking-wide2 text-mist transition-colors duration-300 hover:text-platinum"
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
 
-        <a href="#cta" className="btn-luxe !px-6 !py-2.5 !text-xs">
-          Reserve
-        </a>
+        <div className="flex items-center gap-2 md:gap-4">
+          <Link
+            href="/products"
+            className="btn-luxe !hidden !px-6 !py-2.5 !text-xs sm:!inline-flex"
+          >
+            Shop
+          </Link>
+          <CartButton />
+        </div>
       </nav>
     </header>
   );

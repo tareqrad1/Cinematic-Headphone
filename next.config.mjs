@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    formats: ["image/webp"],
+    formats: ["image/avif", "image/webp"],
   },
   // Three.js / R3F transpile safety
   transpilePackages: ["three"],

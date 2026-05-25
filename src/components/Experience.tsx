@@ -6,12 +6,13 @@ import { ScrollTrigger } from "@/lib/gsap";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { useFrameSequence } from "@/hooks/useFrameSequence";
 import { SEQUENCE } from "@/lib/config";
-import { Navbar } from "@/components/ui/Navbar";
 import { Preloader } from "@/components/ui/Preloader";
 import { Hero } from "@/sections/Hero";
 import { FrameSequence } from "@/sections/FrameSequence";
 import { PersistentStory } from "@/sections/PersistentStory";
 import { Immersive } from "@/sections/Immersive";
+import { CollectionShowcase } from "@/sections/CollectionShowcase";
+import { Finale } from "@/sections/Finale";
 import { CallToAction } from "@/sections/CallToAction";
 
 // Three.js scene is client-only and non-critical → load lazily, no SSR.
@@ -37,13 +38,14 @@ export function Experience() {
     <>
       <Preloader progress={progress} done={ready} />
       <AmbientField />
-      <Navbar />
 
       <main className="relative z-10">
         <Hero />
         <FrameSequence store={store} drawTick={drawTick} />
         <PersistentStory />
         <Immersive />
+        <CollectionShowcase />
+        <Finale />
         <CallToAction />
       </main>
     </>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { scrollReveal } from "@/animations/reveal";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
@@ -53,12 +54,12 @@ export function CallToAction() {
           delivered in a hand-finished case.
         </p>
         <div className="cta-reveal reveal-hidden mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <a href="#top" className="btn-luxe border-gold text-gold">
-            Reserve — $899
-          </a>
-          <a href="#sound" className="btn-luxe">
-            Explore the sound
-          </a>
+          <Link href="/products" className="btn-luxe border-gold text-gold">
+            Shop the collection
+          </Link>
+          <Link href="/products/phantom-one" className="btn-luxe">
+            Reserve Phantom One — $899
+          </Link>
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { SEQUENCE, SEQUENCE_BEATS } from "@/lib/config";
 import { cn } from "@/lib/utils";
@@ -33,7 +33,9 @@ const IMG_ASPECT = SEQUENCE.width / SEQUENCE.height;
 export function FrameSequence({
   store,
   drawTick,
-  scrollLength = 5,
+  // Pin length tuned for dense frame-to-scroll mapping (≈ one frame per ~25px),
+  // so scroll gestures advance many frames and motion reads as continuous.
+  scrollLength = 3.5,
 }: FrameSequenceProps) {
   const root = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -140,23 +142,26 @@ export function FrameSequence({
     ro.observe(canvas);
 
     const ctx = gsap.context(() => {
-      // Single tween drives the frame index; the only per-tick work is the
-      // dirty-checked paint scheduled via rAF — no computation in onUpdate.
-      gsap.to(frameRef.current, {
-        value: FRAME_COUNT - 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top top",
-          end: () => `+=${window.innerHeight * scrollLength}`,
-          scrub: 0.6,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          fastScrollEnd: true,
+      // The frame index is driven DIRECTLY from the ScrollTrigger's own
+      // progress — its onUpdate fires on every scrub tick, so the canvas can
+      // never freeze behind a stale tween. The only per-tick work is writing a
+      // number + scheduling one rAF-coalesced, dirty-checked paint.
+      ScrollTrigger.create({
+        trigger: root.current,
+        start: "top top",
+        end: () => `+=${window.innerHeight * scrollLength}`,
+        // Low scrub: Lenis smooths input; a high value here double-damps and
+        // makes frames trail the scroll. 0.3 tracks tightly yet smoothly.
+        scrub: 0.3,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        fastScrollEnd: true,
+        onUpdate: (self) => {
+          frameRef.current.value = self.progress * (FRAME_COUNT - 1);
+          scheduleDraw();
         },
-        onUpdate: scheduleDraw,
       });
 
       // Beat overlays — ONE shared scrubbed timeline whose total length is
