@@ -263,44 +263,127 @@ export function Finale() {
       {/* cinematic vignette */}
       <div className="pointer-events-none absolute inset-0 z-[3] bg-[radial-gradient(ellipse_at_center,transparent_42%,rgba(5,5,6,0.82)_100%)]" />
 
-      {/* opening title — calm luxury, fades out as motion begins */}
+      {/* opening title — fades out as motion begins */}
       <div
         data-finale-intro
-        className="container-luxe pointer-events-none absolute inset-x-0 top-[14%] z-[4] flex flex-col items-center text-center"
+        className="pointer-events-none absolute inset-x-0 top-[12%] z-[4]
+                   flex flex-col items-center gap-5 text-center"
       >
-        <span className="kicker">The Finale</span>
-        <h2 className="display-lg mt-4 max-w-2xl text-metallic">
-          The moment it all comes together
+        {/* animated bracket ornament */}
+        <div className="flex items-center gap-4">
+          <div className="h-px w-16 bg-gradient-to-r from-transparent to-gold/50" />
+          <span className="text-[10px] uppercase tracking-[0.3em] text-gold/70">
+            Aurora Acoustics
+          </span>
+          <div className="h-px w-16 bg-gradient-to-l from-transparent to-gold/50" />
+        </div>
+        <h2 className="font-display text-[clamp(2rem,5vw,4.2rem)] leading-[0.96]
+                       tracking-tight text-metallic">
+          The moment it<br className="hidden sm:block" /> all comes together
         </h2>
+        <p className="text-sm tracking-wide2 text-mist/40">
+          Scroll to experience
+        </p>
+        {/* animated chevron */}
+        <svg
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"
+          className="mt-2 h-6 w-6 animate-bounce text-gold/40"
+        >
+          <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </div>
 
-      {/* CTA scrim — darkens the held hero frame so the CTA stays readable */}
+      {/* CTA scrim */}
       <div
         data-finale-scrim
-        className="pointer-events-none absolute inset-0 z-[4] bg-gradient-to-t from-void via-void/70 to-void/20 opacity-0"
+        className="pointer-events-none absolute inset-0 z-[4]
+                   bg-gradient-to-t from-void via-void/75 to-void/10 opacity-0"
       />
 
-      {/* CTA — reveal is scroll-scrubbed (data-cta-stagger driven by the
-          timeline). `revealed` only toggles interactivity / accessibility. */}
+      {/* ── CTA panel ── */}
       <div
-        className="absolute inset-x-0 bottom-[16%] z-[5] flex flex-col items-center text-center"
+        className="absolute inset-x-0 bottom-0 z-[5] pb-[10%]"
         style={{ pointerEvents: revealed ? "auto" : "none" }}
         aria-hidden={!revealed}
       >
-        <span data-cta-stagger className="kicker opacity-0">
-          Enter the Collection
-        </span>
-        <h3 data-cta-stagger className="display-lg mt-4 max-w-3xl text-metallic opacity-0">
-          Experience Sound Differently
-        </h3>
-        <Link
-          data-cta-stagger
-          href="/products"
-          className="btn-luxe mt-8 border-gold text-gold opacity-0"
-          tabIndex={revealed ? 0 : -1}
-        >
-          Start Shopping
-        </Link>
+        <div className="container-luxe flex flex-col items-center text-center">
+
+          {/* top rule */}
+          <div
+            data-cta-stagger
+            className="mb-8 flex items-center gap-5 opacity-0"
+          >
+            <div className="h-px w-20 bg-gradient-to-r from-transparent via-gold/40 to-gold/70" />
+            <span className="text-[10px] uppercase tracking-[0.3em] text-gold/60">
+              Limited Edition
+            </span>
+            <div className="h-px w-20 bg-gradient-to-l from-transparent via-gold/40 to-gold/70" />
+          </div>
+
+          {/* product name */}
+          <div data-cta-stagger className="opacity-0">
+            <span className="kicker mb-3 block tracking-[0.4em]">Phantom One</span>
+            <h3
+              className="font-display text-[clamp(3.5rem,9vw,8rem)] leading-[0.9]
+                         tracking-tight text-metallic"
+            >
+              Hear<br className="sm:hidden" />
+              {" "}everything.
+            </h3>
+          </div>
+
+          {/* descriptor */}
+          <p
+            data-cta-stagger
+            className="mt-6 max-w-md text-sm leading-relaxed text-mist/60 opacity-0"
+          >
+            Reserve yours today. Limited first edition, individually numbered
+            and delivered in a hand-finished case.
+          </p>
+
+          {/* CTAs */}
+          <div
+            data-cta-stagger
+            className="mt-10 flex flex-wrap items-center justify-center gap-4 opacity-0"
+          >
+            <Link
+              href="/products"
+              tabIndex={revealed ? 0 : -1}
+              className="group relative overflow-hidden rounded-full border border-white/15
+                         px-8 py-3.5 text-xs uppercase tracking-wide2 text-platinum
+                         transition-all duration-500
+                         hover:border-gold/60 hover:text-gold
+                         hover:shadow-[0_0_40px_-8px_rgba(200,164,92,0.3)]"
+            >
+              Shop the collection
+            </Link>
+            <Link
+              href="/products/phantom-one"
+              tabIndex={revealed ? 0 : -1}
+              className="group relative flex items-center gap-2.5 overflow-hidden
+                         rounded-full bg-gold px-8 py-3.5 text-xs font-semibold
+                         uppercase tracking-wide2 text-void
+                         transition-all duration-500
+                         hover:bg-[#d8b46c] hover:shadow-[0_12px_48px_-8px_rgba(200,164,92,0.7)]"
+            >
+              {/* sweep shimmer */}
+              <span
+                className="pointer-events-none absolute inset-0 -translate-x-full
+                           skew-x-[-20deg] bg-white/25 transition-transform
+                           duration-700 group-hover:translate-x-[200%]"
+              />
+              <span className="relative">Reserve Phantom One — $899</span>
+            </Link>
+          </div>
+
+          {/* tiny footnote */}
+          <p
+            data-cta-stagger
+            className="mt-8 text-[10px] uppercase tracking-wide2 text-mist/25 opacity-0"
+          >
+            Free worldwide shipping · 2-year warranty · 30-day returns
+          </p>
+        </div>
       </div>
     </section>
   );
