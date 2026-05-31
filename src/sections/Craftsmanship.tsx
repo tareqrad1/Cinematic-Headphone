@@ -16,10 +16,10 @@ export function Craftsmanship() {
       // section intro
       const intro = gsap.utils.toArray<HTMLElement>(".craft-intro .craft-reveal");
       if (intro.length > 0) {
-        gsap.set(intro, { y: 48, autoAlpha: 0, filter: "blur(12px)" });
+        gsap.set(intro, { y: 48, opacity: 0, filter: "blur(12px)" });
         gsap.to(intro, {
-          y: 0, autoAlpha: 1, filter: "blur(0px)",
-          duration: 1.1, stagger: 0.12, ease: "power3.out", clearProps: "filter",
+          y: 0, opacity: 1, filter: "blur(0px)",
+          duration: 1.1, stagger: 0.12, ease: "power3.out", clearProps: "opacity,filter,transform",
           scrollTrigger: { trigger: root.current, start: "top 85%", once: true },
         });
       }
@@ -29,10 +29,10 @@ export function Craftsmanship() {
         // copy reveal
         const copy = row.querySelectorAll<HTMLElement>(".craft-reveal");
         if (copy.length > 0) {
-          gsap.set(copy, { y: 48, autoAlpha: 0, filter: "blur(12px)" });
+          gsap.set(copy, { y: 48, opacity: 0, filter: "blur(12px)" });
           gsap.to(copy, {
-            y: 0, autoAlpha: 1, filter: "blur(0px)",
-            duration: 1.1, stagger: 0.12, ease: "power3.out", clearProps: "filter",
+            y: 0, opacity: 1, filter: "blur(0px)",
+            duration: 1.1, stagger: 0.12, ease: "power3.out", clearProps: "opacity,filter,transform",
             scrollTrigger: { trigger: row, start: "top 82%", once: true },
           });
         }
@@ -41,9 +41,10 @@ export function Craftsmanship() {
         const card = row.querySelector<HTMLElement>("[data-craft-card]");
         if (card) {
           gsap.fromTo(card,
-            { scale: 0.94, autoAlpha: 0 },
+            { scale: 0.94, opacity: 0 },
             {
-              scale: 1, autoAlpha: 1, duration: 1.2, ease: "power3.out",
+              scale: 1, opacity: 1, duration: 1.2, ease: "power3.out",
+              clearProps: "opacity,transform",
               scrollTrigger: { trigger: row, start: "top 85%", once: true },
             },
           );

@@ -24,20 +24,20 @@ export function CollectionShowcase() {
     if (!root.current) return;
     const ctx = gsap.context(() => {
       // header
-      gsap.set(".cs-header", { y: 48, autoAlpha: 0, filter: "blur(12px)" });
+      gsap.set(".cs-header", { y: 48, opacity: 0, filter: "blur(12px)" });
       gsap.to(".cs-header", {
-        y: 0, autoAlpha: 1, filter: "blur(0px)",
+        y: 0, opacity: 1, filter: "blur(0px)",
         duration: 1.1, stagger: 0.12, ease: "power3.out",
-        clearProps: "filter",
+        clearProps: "opacity,filter,transform",
         scrollTrigger: { trigger: root.current, start: "top 85%", once: true },
       });
 
       // cards stagger in from below
-      gsap.set(".cs-card", { y: 80, autoAlpha: 0, filter: "blur(14px)" });
+      gsap.set(".cs-card", { y: 80, opacity: 0, filter: "blur(14px)" });
       gsap.to(".cs-card", {
-        y: 0, autoAlpha: 1, filter: "blur(0px)",
+        y: 0, opacity: 1, filter: "blur(0px)",
         duration: 1.15, stagger: 0.18, ease: "power3.out",
-        clearProps: "filter",
+        clearProps: "opacity,filter,transform",
         scrollTrigger: { trigger: root.current, start: "top 80%", once: true },
       });
 

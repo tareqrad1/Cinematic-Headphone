@@ -32,15 +32,7 @@ function reducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case "ADD": {
       const existing = state.lines.find((l) => l.product.id === action.product.id);
-      if (existing) {
-        return {
-          lines: state.lines.map((l) =>
-            l.product.id === action.product.id
-              ? { ...l, quantity: Math.min(MAX_QTY, l.quantity + action.quantity) }
-              : l,
-          ),
-        };
-      }
+      if (existing) return state;
       return {
         lines: [
           ...state.lines,

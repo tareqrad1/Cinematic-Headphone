@@ -35,13 +35,14 @@ export function FilterSheet({
     gsap.killTweensOf([scrim, sheet]);
 
     if (open) {
-      gsap.set(scrim, { display: "block" });
-      gsap.to(scrim, { autoAlpha: 1, duration: reduce ? 0 : 0.35 });
+      gsap.set(scrim, { display: "block", pointerEvents: "auto" });
+      gsap.to(scrim, { opacity: 1, duration: reduce ? 0 : 0.35 });
       gsap.to(sheet, { yPercent: 0, duration: reduce ? 0 : 0.55, ease: "expo.out" });
     } else {
       gsap.to(sheet, { yPercent: 100, duration: reduce ? 0 : 0.4, ease: "power3.in" });
+      gsap.set(scrim, { pointerEvents: "none" });
       gsap.to(scrim, {
-        autoAlpha: 0,
+        opacity: 0,
         duration: reduce ? 0 : 0.35,
         onComplete: () => gsap.set(scrim, { display: "none" }),
       });
@@ -60,7 +61,7 @@ export function FilterSheet({
       <div
         ref={scrimRef}
         onClick={onClose}
-        className="fixed inset-0 z-[95] hidden bg-void/70 opacity-0 backdrop-blur-sm"
+        className="fixed inset-0 z-[95] hidden bg-void/70 opacity-0 backdrop-blur-sm [pointer-events:none]"
       />
       <div
         ref={sheetRef}

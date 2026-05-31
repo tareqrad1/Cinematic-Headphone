@@ -52,7 +52,7 @@ export const ProductGallery = forwardRef<ProductGalleryHandle, ProductGalleryPro
       // Crossfade: incoming fades + lifts in while outgoing fades out.
       // No remount — both <Image> elements live in the DOM simultaneously.
       gsap.set(incoming, { autoAlpha: 0, scale: 1.04 });
-      gsap.to(outgoing, { autoAlpha: 0, scale: 0.97, duration: 0.3, ease: "power2.in" });
+      if (outgoing) gsap.to(outgoing, { autoAlpha: 0, scale: 0.97, duration: 0.3, ease: "power2.in" });
       gsap.to(incoming, { autoAlpha: 1, scale: 1, duration: 0.55, ease: "power3.out", delay: 0.1 });
 
       setActive(i);

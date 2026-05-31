@@ -76,14 +76,14 @@ export function ProductCatalog() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         cards,
-        { autoAlpha: 0, y: 26 },
+        { opacity: 0, y: 26 },
         {
-          autoAlpha: 1,
+          opacity: 1,
           y: 0,
           duration: 0.6,
           stagger: 0.07,
           ease: "power3.out",
-          clearProps: "transform",
+          clearProps: "opacity,transform",
         },
       );
     }, grid);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { useCart } from "@/store/cart";
 import { useFlyTarget } from "@/store/fly-target";
@@ -13,7 +14,7 @@ import { prefersReducedMotion } from "@/lib/utils";
  * only renders after hydration so SSR markup matches the empty initial state.
  */
 export function CartButton() {
-  const { count, toggle, hydrated } = useCart();
+  const { count, hydrated } = useCart();
   const { registerTarget } = useFlyTarget();
 
   const iconRef = useRef<HTMLSpanElement>(null);
@@ -37,10 +38,9 @@ export function CartButton() {
   }, [count]);
 
   return (
-    <button
-      type="button"
-      onClick={toggle}
-      aria-label={`Open cart, ${count} items`}
+    <Link
+      href="/cart"
+      aria-label={`View cart, ${count} items`}
       className="relative flex h-10 w-10 items-center justify-center text-platinum transition-colors duration-300 hover:text-gold"
     >
       <span ref={iconRef} className="inline-flex">
@@ -54,6 +54,6 @@ export function CartButton() {
           {count}
         </span>
       )}
-    </button>
+    </Link>
   );
 }

@@ -41,15 +41,15 @@ export function Immersive() {
       // `once` trigger with a forgiving start, and refresh after mount.
       const targets = gsap.utils.toArray<HTMLElement>(".imm-reveal");
       if (targets.length > 0) {
-        gsap.set(targets, { y: 48, autoAlpha: 0, filter: "blur(12px)" });
+        gsap.set(targets, { y: 48, opacity: 0, filter: "blur(12px)" });
         gsap.to(targets, {
           y: 0,
-          autoAlpha: 1,
+          opacity: 1,
           filter: "blur(0px)",
           duration: 1.1,
           stagger: 0.12,
           ease: "power3.out",
-          clearProps: "filter",
+          clearProps: "opacity,filter,transform",
           scrollTrigger: {
             trigger: root.current,
             start: "top 88%",

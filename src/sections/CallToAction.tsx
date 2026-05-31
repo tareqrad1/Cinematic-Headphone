@@ -249,15 +249,15 @@ export function CallToAction() {
       // trigger with a forgiving start, and refresh after mount.
       const targets = gsap.utils.toArray<HTMLElement>(".cta-reveal");
       if (targets.length > 0) {
-        gsap.set(targets, { y: 60, autoAlpha: 0, filter: "blur(12px)" });
+        gsap.set(targets, { y: 60, opacity: 0, filter: "blur(12px)" });
         gsap.to(targets, {
           y: 0,
-          autoAlpha: 1,
+          opacity: 1,
           filter: "blur(0px)",
           duration: 1.1,
           stagger: 0.14,
           ease: "power3.out",
-          clearProps: "filter",
+          clearProps: "opacity,filter,transform",
           scrollTrigger: {
             trigger: root.current,
             start: "top 88%",
