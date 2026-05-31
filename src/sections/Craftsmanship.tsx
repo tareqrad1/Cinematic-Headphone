@@ -7,77 +7,57 @@ import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { STORY_SECTIONS } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
-/**
- * CRAFTSMANSHIP — the grounded editorial middle of the homepage.
- *
- * The pinned/canvas sections before it are pure immersion; this is the "why":
- * three alternating image/text splits about materials, engineering, and brand
- * philosophy. It gives the cinematic rhythm a place to breathe between two
- * full-viewport moments.
- *
- * Motion budget (kept light): per row, ONE scrubbed parallax on the image
- * (GPU transform) and ONE toggle-actions reveal on the copy — both batched in a
- * single gsap.context and reverted on unmount. No per-frame React work.
- */
 export function Craftsmanship() {
   const root = useRef<HTMLElement>(null);
 
   useIsomorphicLayoutEffect(() => {
     if (!root.current) return;
     const ctx = gsap.context(() => {
-      // Self-healing reveal (see CollectionShowcase/Immersive): this editorial
-      // sits between pinned sections, so a plain scroll-reveal can mis-measure
-      // and never fire. Hide via JS (CSS resting state stays visible), reveal
-      // with a `once` trigger, then refresh after the pins inject their spacing.
-
-      // Section intro.
-      const intro = gsap.utils.toArray<HTMLElement>(
-        ".craft-intro .craft-reveal",
-      );
+      // section intro
+      const intro = gsap.utils.toArray<HTMLElement>(".craft-intro .craft-reveal");
       if (intro.length > 0) {
         gsap.set(intro, { y: 48, autoAlpha: 0, filter: "blur(12px)" });
         gsap.to(intro, {
-          y: 0,
-          autoAlpha: 1,
-          filter: "blur(0px)",
-          duration: 1.1,
-          stagger: 0.12,
-          ease: "power3.out",
-          clearProps: "filter",
+          y: 0, autoAlpha: 1, filter: "blur(0px)",
+          duration: 1.1, stagger: 0.12, ease: "power3.out", clearProps: "filter",
           scrollTrigger: { trigger: root.current, start: "top 85%", once: true },
         });
       }
 
       const rows = gsap.utils.toArray<HTMLElement>("[data-craft-row]");
       rows.forEach((row) => {
+        // copy reveal
         const copy = row.querySelectorAll<HTMLElement>(".craft-reveal");
         if (copy.length > 0) {
           gsap.set(copy, { y: 48, autoAlpha: 0, filter: "blur(12px)" });
           gsap.to(copy, {
-            y: 0,
-            autoAlpha: 1,
-            filter: "blur(0px)",
-            duration: 1.1,
-            stagger: 0.12,
-            ease: "power3.out",
-            clearProps: "filter",
+            y: 0, autoAlpha: 1, filter: "blur(0px)",
+            duration: 1.1, stagger: 0.12, ease: "power3.out", clearProps: "filter",
             scrollTrigger: { trigger: row, start: "top 82%", once: true },
           });
         }
-        // image parallax — subtle vertical drift as the row crosses the viewport
+
+        // image scale-in on scroll enter
+        const card = row.querySelector<HTMLElement>("[data-craft-card]");
+        if (card) {
+          gsap.fromTo(card,
+            { scale: 0.94, autoAlpha: 0 },
+            {
+              scale: 1, autoAlpha: 1, duration: 1.2, ease: "power3.out",
+              scrollTrigger: { trigger: row, start: "top 85%", once: true },
+            },
+          );
+        }
+
+        // parallax drift on the inner image
         const media = row.querySelector<HTMLElement>("[data-craft-media]");
         if (media) {
-          gsap.fromTo(
-            media,
-            { yPercent: -6 },
+          gsap.fromTo(media,
+            { yPercent: -8 },
             {
-              yPercent: 6,
-              ease: "none",
+              yPercent: 8, ease: "none",
               scrollTrigger: {
-                trigger: row,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true,
+                trigger: row, start: "top bottom", end: "bottom top", scrub: true,
               },
             },
           );
@@ -95,14 +75,24 @@ export function Craftsmanship() {
       id="craft"
       className="relative overflow-hidden border-t border-white/5 py-28 md:py-40"
     >
-      {/* section intro */}
+      {/* ambient top glow */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-96 -z-10 opacity-40"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 100% at 50% 0%, rgba(200,164,92,0.06) 0%, transparent 100%)",
+        }}
+      />
+
+      {/* ── intro ── */}
       <div className="craft-intro container-luxe">
         <span className="craft-reveal kicker">The Object</span>
         <h2 className="craft-reveal display-lg mt-5 max-w-3xl text-metallic">
-          Made to be felt, before it&apos;s heard
+          Made to be felt,<br className="hidden md:block" /> before it&apos;s heard
         </h2>
       </div>
 
+      {/* ── rows ── */}
       <div className="container-luxe mt-24 space-y-28 md:space-y-40">
         {STORY_SECTIONS.map((item, i) => {
           const reversed = i % 2 === 1;
@@ -111,45 +101,97 @@ export function Craftsmanship() {
               key={item.id}
               data-craft-row
               className={cn(
-                "grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-20",
+                "grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16",
                 reversed && "md:[direction:rtl]",
               )}
             >
-              {/* media */}
+              {/* ── image card ── */}
               <div className="md:[direction:ltr]">
-                <div className="surface card-sheen group relative aspect-[4/5] overflow-hidden md:aspect-square">
-                  <span
-                    className="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(200,164,92,0.16),transparent_70%)] blur-3xl"
-                    aria-hidden
-                  />
-                  <div
-                    data-craft-media
-                    className="relative h-[112%] w-full will-change-transform"
-                  >
-                    <Image
-                      src={item.image.src}
-                      alt={item.imageAlt}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-contain p-10 md:p-16"
-                    />
+                <div
+                  data-craft-card
+                  className="group relative overflow-hidden rounded-2xl border border-white/[0.07]
+                             shadow-[0_32px_80px_-24px_rgba(0,0,0,0.8)]"
+                  style={{ willChange: "transform" }}
+                >
+                  {/* aspect container — portrait for cover images */}
+                  <div className="relative aspect-[3/4] overflow-hidden">
+                    {/* parallax inner — slightly taller so the drift never shows edges */}
+                    <div
+                      data-craft-media
+                      className="absolute inset-x-0 -top-[8%] bottom-[-8%] will-change-transform"
+                    >
+                      <Image
+                        src={item.image.src}
+                        alt={item.imageAlt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
+                                   group-hover:scale-[1.04]"
+                      />
+                    </div>
+
+                    {/* bottom gradient — text legibility + design depth */}
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10
+                                    h-2/5 bg-gradient-to-t from-void/90 via-void/40 to-transparent" />
+
+                    {/* top subtle vignette */}
+                    <div className="pointer-events-none absolute inset-x-0 top-0 z-10
+                                    h-24 bg-gradient-to-b from-void/30 to-transparent" />
+
+                    {/* kicker badge inside the image */}
+                    <div className="absolute left-5 top-5 z-20">
+                      <span
+                        className="inline-flex items-center gap-2 rounded-full border border-white/10
+                                   bg-void/60 px-3 py-1.5 text-[10px] uppercase tracking-wide2
+                                   text-mist/70 backdrop-blur-md"
+                      >
+                        <span
+                          className="h-1.5 w-1.5 rounded-full bg-gold/70"
+                          style={{ boxShadow: "0 0 6px 2px rgba(200,164,92,0.4)" }}
+                        />
+                        {item.kicker}
+                      </span>
+                    </div>
+
+                    {/* stat chip — bottom-right of image */}
+                    {item.stat && (
+                      <div className="absolute bottom-5 right-5 z-20 text-right">
+                        <div className="font-display text-3xl leading-none text-gold">
+                          {item.stat.value}
+                        </div>
+                        <div className="mt-1 text-[10px] uppercase tracking-wide2 text-mist/50">
+                          {item.stat.label}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* index number watermark */}
+                    <div
+                      className="pointer-events-none absolute -right-3 bottom-24 z-10
+                                  font-display text-[8rem] leading-none text-white/[0.03] select-none"
+                    >
+                      0{i + 1}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* copy */}
+              {/* ── copy ── */}
               <div className="md:[direction:ltr]">
-                <span className="craft-reveal kicker">
-                  {item.kicker}
-                </span>
-                <h3 className="craft-reveal mt-4 font-display text-[clamp(2rem,4vw,3.4rem)] leading-[1.02] text-platinum">
+                <span className="craft-reveal kicker">{item.kicker}</span>
+                <h3
+                  className="craft-reveal mt-4 font-display text-[clamp(2rem,4vw,3.4rem)]
+                             leading-[1.02] text-platinum"
+                >
                   {item.title}
                 </h3>
-                <p className="craft-reveal body-lux mt-6 max-w-md">
-                  {item.body}
-                </p>
+                <p className="craft-reveal body-lux mt-6 max-w-md">{item.body}</p>
+
                 {item.stat && (
-                  <div className="craft-reveal mt-10 flex items-baseline gap-4 border-t border-white/[0.07] pt-6">
+                  <div
+                    className="craft-reveal mt-10 flex items-baseline gap-4
+                               border-t border-white/[0.07] pt-6"
+                  >
                     <span className="font-display text-5xl text-gold">
                       {item.stat.value}
                     </span>
@@ -158,6 +200,14 @@ export function Craftsmanship() {
                     </span>
                   </div>
                 )}
+
+                {/* decorative line */}
+                <div className="craft-reveal mt-10 flex items-center gap-4">
+                  <div className="h-px w-12 bg-gradient-to-r from-gold/50 to-transparent" />
+                  <span className="text-[10px] uppercase tracking-luxe text-mist/25">
+                    Aurora Acoustics
+                  </span>
+                </div>
               </div>
             </div>
           );

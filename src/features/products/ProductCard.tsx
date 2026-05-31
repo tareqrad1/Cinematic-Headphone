@@ -43,13 +43,22 @@ function ProductCardBase({ product, view, priority = false }: ProductCardProps) 
         href={href}
         className={cn(
           "card-sheen relative block overflow-hidden bg-gradient-to-b from-carbon to-graphite",
-          isList ? "aspect-[4/3] sm:aspect-auto sm:w-2/5" : "aspect-[4/5]",
+          isList
+            ? "aspect-[4/3] sm:aspect-auto sm:w-2/5"
+            : product.coverImage
+              ? "aspect-[3/4]"
+              : "aspect-[4/5]",
         )}
         aria-label={`View ${product.name}`}
       >
-        {/* accent glow tinted to the colourway */}
+        {/* accent glow — toned down for cover images so the photo reads clearly */}
         <span
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40 blur-3xl transition-opacity duration-700 group-hover:opacity-70"
+          className={cn(
+            "pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl transition-opacity duration-700",
+            product.coverImage
+              ? "opacity-20 group-hover:opacity-35"
+              : "opacity-40 group-hover:opacity-70",
+          )}
           style={{ background: `radial-gradient(circle, ${product.accent}, transparent 70%)` }}
         />
         <Image
@@ -59,8 +68,17 @@ function ProductCardBase({ product, view, priority = false }: ProductCardProps) 
           fill
           sizes={isList ? "(max-width: 640px) 100vw, 40vw" : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
           priority={priority}
-          className="relative z-[1] object-contain p-6 transition-transform duration-700 ease-cinematic group-hover:scale-[1.06] md:p-10"
+          className={cn(
+            "relative z-[1] transition-transform duration-700 ease-cinematic group-hover:scale-[1.06]",
+            product.coverImage
+              ? "object-cover"
+              : "object-contain p-6 md:p-10",
+          )}
         />
+        {/* subtle dark vignette on cover images so text overlay is legible */}
+        {product.coverImage && (
+          <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-graphite/80 via-transparent to-transparent" />
+        )}
 
         {product.featured && (
           <span className="absolute left-4 top-4 z-[2] rounded-full border border-gold/40 bg-void/40 px-3 py-1 text-[10px] uppercase tracking-wide2 text-gold backdrop-blur-sm">

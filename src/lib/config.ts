@@ -38,7 +38,7 @@ export const SITE = {
   shortName: BRAND.name,
   description:
     "AURORA crafts luxury over-ear headphones — beryllium drivers, machined aluminium, and adaptive spatial audio. Engineered for silence.",
-  ogImage: "/products/phantom-one-1.webp",
+  ogImage: "/products/57712f7c1014b09b3a76437adb471a98.jpg",
 } as const;
 
 /**
@@ -152,7 +152,7 @@ export const STORY_SECTIONS: ReadonlyArray<
     title: "Everything we removed",
     body: "No logos shouting for attention. No seams you can feel. No setting you have to think about. What's left is the only thing that matters — the music, and you.",
     stat: { value: "01", label: "Object, perfected" },
-    image: { src: "/products/phantom-one-1.webp", width: 439, height: 611 },
+    image: { src: "/products/57712f7c1014b09b3a76437adb471a98.jpg", width: 750, height: 1000 },
     imageAlt: "The Aurora Phantom One, hero silhouette",
   },
 ];

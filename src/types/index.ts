@@ -48,7 +48,8 @@ export type ProductCategory =
   | "Over-Ear"
   | "Studio"
   | "Wireless"
-  | "Limited";
+  | "Limited"
+  | "In-Ear";
 
 /** A single resolved image with its intrinsic dimensions for next/image. */
 export interface ProductImage {
@@ -80,6 +81,8 @@ export interface Product {
   /** hex used for the swatch + ambient glow tint behind the product */
   readonly accent: string;
   readonly featured: boolean;
+  /** when true the card image uses object-cover (full-bleed) instead of object-contain */
+  readonly coverImage?: boolean;
   /** newest-first ordering key (higher = newer) */
   readonly releaseRank: number;
   readonly gallery: ReadonlyArray<ProductImage>;

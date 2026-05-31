@@ -49,9 +49,9 @@ export function ProductDetail({ product }: { product: Product }) {
       </Link>
 
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* gallery */}
-        <div className="pd-reveal">
-          <ProductGallery ref={galleryRef} images={product.gallery} accent={product.accent} />
+        {/* gallery — NOT part of pd-reveal so the image loads immediately */}
+        <div>
+          <ProductGallery ref={galleryRef} images={product.gallery} accent={product.accent} coverImage={product.coverImage} />
         </div>
 
         {/* purchase column */}
