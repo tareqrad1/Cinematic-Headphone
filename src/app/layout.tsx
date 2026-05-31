@@ -35,6 +35,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: SITE.name }],
   alternates: { canonical: "/" },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/apple-icon.svg", type: "image/svg+xml", sizes: "180x180" },
+    ],
+  },
   openGraph: {
     type: "website",
     siteName: SITE.name,
